@@ -27,7 +27,7 @@ SECRET_KEY = 'k0pad$tgr8tai5)jy=i0a&#bbfqs)oootb)qjbjr7g^g%6@#ex'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://dashboard.heroku.com/apps/rentmywebsite','localhost','127.0.0.1']
 
 
 # Application definition
