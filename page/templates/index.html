@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+{% block title %}
+  | Home
+{% endblock title %}
+{% block main %}
+
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    {% include 'components/_alert2.html' %}
+    <div class="container">
+      <h1>Lorem Ipsum</h1>
+      <p class="lead text-muted" id="changetext">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+      <p>
+        {% if user.is_authenticated %}
+        <p class="h4">Welcome, {{user}}</p>
+          <a href="logout" class="btn btn-danger my-2" alert id="clickbtn">Logout</a>
+          <a href="create" class="btn btn-success my-2" alert id="clickbtn">Add Item</a>
+        {%  else %}
+        <a href="register" class="btn btn-primary my-2" id="clickbtn">Register</a>
+        <a href="login" class="btn btn-secondary my-2" id="clickbtn2">Login
+        </a>
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+
+
+  <div class="album py-5 bg-light">
+
+    <div class="container">
+      <div class="row">
+        {% for obj in obj %}  
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img src="{{obj.img.url}}" height="40%" width="100%"/>
+            <div class="card-body">
+              <h5 class="card-title-white bg-secondary text-center ">{{obj.name}}</h5>
+              <p class="card-text">{{obj.desc|truncatechars:100}}</p>
+              <p class="card-text-white bg-success text-right">Price: {{obj.price}} $</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{% url 'detail' obj.id %}" class="btn btn-primary my-2" id="clickbtn2">View</a>
+                  {% comment %} <button href="detail" type="button" class="btn btn-sm btn-primary">View</button> {% endcomment %}
+                  {% if obj.reg_agent.id == user.id %}
+                    <a href="{% url 'update' obj.id %}" class="btn btn-secondary my-2" id="clickbtn2">Edit</a>
+                    <a href="{% url 'delete' obj.id %}" class="btn btn-danger my-2" id="clickbtn2">Delete</a>
+                  {% endif %} 
+                </div>
+                <small class="text-right">{{obj.dt}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center">
+          <p>No items Available</p>  
+        </div>        
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+ 
+  {% if is_paginated %}
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+</main>
+{% endblock main %}
